@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Reflection;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
+using System.Text.Json;
 using System.Text;
 using System.Threading.Tasks;
 using WooCommerceNET.Base;
@@ -392,17 +390,8 @@ namespace WooCommerceNET
 
         public virtual string SerializeJSon<T>(T t)
         {
-            DataContractJsonSerializerSettings settings = new DataContractJsonSerializerSettings()
-            {
-                DateTimeFormat = new DateTimeFormat(DateTimeFormat),
-                UseSimpleDictionaryFormat = true
-            };
-
-            MemoryStream stream = new MemoryStream();
-            DataContractJsonSerializer ds = new DataContractJsonSerializer(t.GetType(), settings);
-            ds.WriteObject(stream, t);
-            byte[] data = stream.ToArray();
-            string jsonString = Encoding.UTF8.GetString(data, 0, data.Length);
+            var serializerOpts = new JsonSerializerOptions(JsonSerializerDefaults.Web);
+            string jsonString = JsonSerializer.Serialize(t, serializerOpts);
 
             if (t.GetType().GetMethod("FormatJsonS") != null)
             {
@@ -415,8 +404,6 @@ namespace WooCommerceNET
                 else
                     jsonString = "{\"" + typeof(T).Name.ToLower() + "\":" + jsonString + "}";
 
-            stream.Dispose();
-
             if (jsonSeFilter != null)
                 jsonString = jsonSeFilter.Invoke(jsonString);
 
@@ -425,37 +412,14 @@ namespace WooCommerceNET
 
         public virtual T DeserializeJSon<T>(string jsonString)
         {
+
+            var serializerOpts = new JsonSerializerOptions(JsonSerializerDefaults.Web);
             if (jsonDeseFilter != null)
                 jsonString = jsonDeseFilter.Invoke(jsonString);
 
-            Type dT = typeof(T);
-
             try
             {
-                if (dT.Name.EndsWith("List"))
-                    dT = dT.GetTypeInfo().DeclaredProperties.First().PropertyType.GenericTypeArguments[0];
-
-                if (dT.FullName.StartsWith("System.Collections.Generic.List"))
-                {
-                    dT = dT.GetProperty("Item").PropertyType;
-                }
-
-                if (dT.GetMethod("FormatJsonD") != null)
-                {
-                    jsonString = dT.GetMethod("FormatJsonD").Invoke(null, new object[] { jsonString }).ToString();
-                }
-
-                DataContractJsonSerializerSettings settings = new DataContractJsonSerializerSettings()
-                {
-                    DateTimeFormat = new DateTimeFormat(DateTimeFormat),
-                    UseSimpleDictionaryFormat = true
-                };
-
-                DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(T), settings);
-                MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(jsonString));
-                T obj = (T)ser.ReadObject(stream);
-                stream.Dispose();
-                return obj;
+                return JsonSerializer.Deserialize<T>(jsonString, serializerOpts);
             }
             catch (Exception ex)
             {
