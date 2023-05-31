@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33516.290
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WooCommerce.NET", "WooCommerce.NET.csproj", "{033F5EE5-E976-4F45-8817-AE6F52E7828F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1CA70696-4B96-449C-BEB5-8A509BA9A8FE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{033F5EE5-E976-4F45-8817-AE6F52E7828F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{033F5EE5-E976-4F45-8817-AE6F52E7828F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{033F5EE5-E976-4F45-8817-AE6F52E7828F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{033F5EE5-E976-4F45-8817-AE6F52E7828F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DE4723F7-D636-4436-A07B-9D2DCD5D6210}
+	EndGlobalSection
+EndGlobal
