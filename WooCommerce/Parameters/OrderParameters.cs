@@ -17,13 +17,13 @@ namespace WooCommerce.NET.WooCommerce.Parameters
         public string? ModifiedAfter { get; set; }
         public string? ModifiedBefore { get; set; }
         public bool? DatesAreGmt { get; set; }
-        public int[]? Exclude { get; set; }
-        public int[]? Include { get; set; }
+        public IList<int>? Exclude { get; set; }
+        public IList<int>? Include { get; set; }
         public int? Offset { get; set; }
         public string? Order { get; set; }
         public string? OrderBy { get; set; }
-        public int[]? Parent { get; set; }
-        public int[]? ParentExclude { get; set; }
+        public IList<int>? Parent { get; set; }
+        public IList<int>? ParentExclude { get; set; }
         public string[]? Status { get; set; }
         public int? Customer { get; set; }
         public int? Product { get; set; }

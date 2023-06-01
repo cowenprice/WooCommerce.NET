@@ -212,11 +212,11 @@ namespace WooCommerceNET
                     //Endpoint should be starting with wp-json
                     if (endpoint.StartsWith("wp-json"))
                     {
-                        httpRequest = new HttpRequestMessage(HttpMethodExt.Parse(method), new Uri(new Uri($"https://{new Uri(wc_url).Host}"), GetOAuthEndPoint(method.ToString(), endpoint, parms)));
+                        httpRequest = new HttpRequestMessage(HttpMethodExt.Parse(method), new Uri(new Uri($"https://{new Uri(wc_url).Host}"), GetOAuthEndPoint(method.ToString(), endpoint, parms, parametersObj)));
                     }
                     else
                     {
-                        httpRequest = new HttpRequestMessage(HttpMethodExt.Parse(method), wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms));
+                        httpRequest = new HttpRequestMessage(HttpMethodExt.Parse(method), wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms, parametersObj));
                     }
 
                     if (AuthorizedHeader == true)
@@ -233,7 +233,7 @@ namespace WooCommerceNET
                 }
                 else
                 {
-                    httpRequest = new HttpRequestMessage(HttpMethodExt.Parse(method), wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms));
+                    httpRequest = new HttpRequestMessage(HttpMethodExt.Parse(method), wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms, parametersObj));
                     if (Version == APIVersion.WordPressAPIJWT)
                     {
                         httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", JWT_Object.token);
@@ -317,7 +317,7 @@ namespace WooCommerceNET
         {
             if (Version == APIVersion.WordPressAPIJWT || (wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase) && Version != APIVersion.WordPressAPI))
             {
-                if (parms == null)
+                if (parms == null || parametersObj == null)
                     return endpoint;
                 else
                 {

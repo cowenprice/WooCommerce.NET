@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+
+using WooCommerce.NET.WooCommerce.Parameters;
 
 namespace WooCommerceNET.Base
 {
@@ -124,6 +129,35 @@ namespace WooCommerceNET.Base
             {
                 request.Headers[name] = value;
             }
+        }
+        public static string ToParameterString(this IWCItemParameters paramterObj)
+        {
+            var parmBuilder = new StringBuilder();
+
+            foreach (var property in paramterObj.GetType().GetProperties())
+            {
+                var atts = property.GetCustomAttributes(true).ToDictionary(a => a.GetType().Name, a => a);
+                var propName = "";
+                if (atts.TryGetValue("JsonPropertyName", out object value))
+                    propName = value.ToString();
+                //WC Uses Snake Case for request params, so unless specified in the parameterObj, convert to snake case
+                else propName = propName.ToSnakeCase();
+
+                //If it's some form of list, we need add each item in the 
+                if (property.IsGenericList())
+                    foreach (var item in property.GetValue(paramterObj) as IList)
+                        parmBuilder.Append($"{propName}[]={item.ToString()}&");
+                
+                else
+                    parmBuilder.Append($"{propName}={property.GetValue(paramterObj)}&");
+                
+            }
+            return parmBuilder.ToString().TrimEnd('&');
+        }
+        public static bool IsGenericList(this object o)
+        {
+            var oType = o.GetType();
+            return oType.GetTypeInfo().IsGenericType && oType.GetGenericTypeDefinition() == typeof(IList<>);
         }
     }
 }
