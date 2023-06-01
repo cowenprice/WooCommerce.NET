@@ -24,7 +24,7 @@ namespace WooCommerce.NET.WooCommerce.Parameters
         public string? OrderBy { get; set; }
         public IList<int>? Parent { get; set; }
         public IList<int>? ParentExclude { get; set; }
-        public string[]? Status { get; set; }
+        public IList<string>? Status { get; set; }
         public int? Customer { get; set; }
         public int? Product { get; set; }
         public int? DecimalPoints { get; set; }
